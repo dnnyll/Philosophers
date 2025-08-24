@@ -1,0 +1,7 @@
+argv[0]		The number of philosophers
+argv[1]		The time a philosopher will die if he doesn’t eat
+argv[2]		The time it takes a philosopher to eat
+argv[3]		The time it takes a philosopher to sleep
+argv[4]		Number of times all the philosophers need to eat before terminating the program **
+
+** optional argument
