@@ -1,29 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   routine.cc                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/25 12:12:56 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/08/26 14:55:51 by daniefe2         ###   ########.fr       */
+/*   Created: 2025/08/26 16:37:45 by daniefe2          #+#    #+#             */
+/*   Updated: 2025/08/26 16:39:54 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int	main(int argc, char **argv)
+void	*philo_routine(void *arg)
 {
-	t_philo			*philo;
-	t_program		*program;
-	if (argc < 5 || argc > 6)
-	{
-		printf("incorrect number of arguments.\n");
-		return (1);
-	}
-	if(verify_input_args(argv) == 1);
-		return (1);
-	init_philo(&philo);
-	init_program(&program);
-	return (0);
+	
 }

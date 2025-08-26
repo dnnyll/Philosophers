@@ -1,0 +1,26 @@
+**Exercise: Thread-safe counter**
+
+**Objective:**
+Write a C program where multiple threads increment a shared counter. Use a mutex to prevent race conditions.
+
+**Requirements:**
+
+* Shared variable: `counter` (int, start at 0)
+* Number of threads: 3
+* Each thread increments `counter` **1000 times**
+* Protect `counter` updates with a mutex
+* Print the final `counter` value after all threads finish
+* Allowed functions:
+  `memset, printf, malloc, free, write, usleep, gettimeofday, pthread_create, pthread_detach, pthread_join, pthread_mutex_init, pthread_mutex_destroy, pthread_mutex_lock, pthread_mutex_unlock`
+
+**Hints:**
+
+1. Each thread runs a loop to increment `counter`.
+2. Wrap the increment with `pthread_mutex_lock` and `pthread_mutex_unlock`.
+3. Use `pthread_create` to start threads and `pthread_join` to wait for them.
+
+---
+
+This is short enough to implement in under \~50 lines and shows clearly **why mutexes are needed**.
+
+If you want, I can give an **extra challenge**: make it so threads **increment randomly** (usleep a bit between increments) to make race conditions more visible if you remove the mutex. Do you want that challenge?
