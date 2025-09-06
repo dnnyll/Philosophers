@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 15:17:49 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/08/26 15:40:38 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/06 11:08:01 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,17 @@ void *arg
 int	thread_create(t_program *program, t_philo *philo)
 {
 	int	i;
-	
+
 	i = 0;
 	while (i < program->philo_count)
 	{
-		pthread_create(philo->thread, NULL, philo_routine, &philo);
+		printf("thread_create %d\n", i);
+		if (pthread_create(&philo[i].thread, NULL, philo_routine, &philo[i]) != 0)
+		{
+			printf("Error creating thread for philosopher %d\n", i + 1);
+			return (1);
+		}
 		i++;
 	}
+	return (0);
 }

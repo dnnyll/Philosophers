@@ -1,31 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   memory_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/25 12:12:56 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/06 11:12:56 by daniefe2         ###   ########.fr       */
+/*   Created: 2025/09/06 09:40:41 by daniefe2          #+#    #+#             */
+/*   Updated: 2025/09/06 09:49:43 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int	main(int argc, char **argv)
+void	free_program(t_program *program)
 {
-	t_program		program;
-	t_philo			*philo;
-	if (argc < 5 || argc > 6)
+	int	i;
+
+	if (!program)
+		return;
+	if (program->forks)
 	{
-		printf("incorrect number of arguments.\n");
-		return (1);
+		i = 0;
+		while (i < program->philo_count)
+		{
+			pthread_mutex_destroy(&program->forks[i]);
+			i++;
+		}
+		free(program->forks);
 	}
-	if(verify_input_args(argv) == 1)
-		return (1);
-	philo = init_all(&program, argv);
-	if (!philo)
-		return (1);
-	thread_create(&program, philo);
-	return (0);
+	pthread_mutex_destroy(&program->print_mutex);
 }

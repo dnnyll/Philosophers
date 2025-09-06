@@ -4,11 +4,11 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <stdbool.h>
 # include <string.h>
 # include <pthread.h>
 # include <sys/time.h>
-# include <limits.h>
+
+typedef struct s_program t_program;
 
 typedef struct s_philo
 {
@@ -26,10 +26,10 @@ typedef struct s_philo
 typedef struct	s_program
 {
 	int				philo_count;
-	size_t			time_to_die;
-	size_t			time_to_eat;
-	size_t			time_to_sleep;
-	size_t			times_to_eat;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				times_to_eat;
 	int				death_flag;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_mutex;
@@ -40,12 +40,26 @@ typedef struct	s_program
 }	t_program;
 
 //	initialize.c
-int	init_input(t_philo *philo, t_program *program, char **argv);
-int	init_philo(t_philo *philo);
-int	init_program(t_program *program);
+int		init_input(t_program *program, char **argv);
+int	init_philo(t_philo *philo, t_program *program);
+int		init_program(t_program *program);
+t_philo	*init_all(t_program *program, char **argv);
+
+//	memory_utils.c
+void	free_program(t_program *program);
 
 //	parser.c
 int	verify_input_args(char **input);
+
+//	routine.c
+void	to_think(t_philo *philo);
+void	to_sleep(t_philo *philo);
+void	to_eat(t_philo *philo);
+void *philo_routine(void *arg);
+
+
+//	threads.c
+int	thread_create(t_program *program, t_philo *philo);
 
 //	utils.c
 int	is_valid_digit(char *arg);

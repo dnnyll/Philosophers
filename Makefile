@@ -2,9 +2,14 @@ NAME = philoshopers
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 INCLUDES = include
-SRCS =	source/main.c \
+SRCS =	source/initialize.c \
+		source/main.c \
+		source/memory_utils.c \
 		source/parser.c \
+		source/routine.c \
+		source/threads.c \
 		source/utils.c
+
 OBJS = $(SRCS:.c=.o)
 %.o: %.c
 		$(CC) $(CFLAGS) -I$(INCLUDES) -c $< -o $@
