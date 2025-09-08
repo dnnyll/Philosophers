@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 15:17:49 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/06 11:08:01 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/08 12:11:58 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	thread_create(t_program *program, t_philo *philo)
 	while (i < program->philo_count)
 	{
 		printf("thread_create %d\n", i);
-		if (pthread_create(&philo[i].thread, NULL, philo_routine, &philo[i]) != 0)
+		if (pthread_create(&philo[i].thread, NULL, philo_routine, &philo[i]))
 		{
 			printf("Error creating thread for philosopher %d\n", i + 1);
 			return (1);
@@ -49,3 +49,21 @@ int	thread_create(t_program *program, t_philo *philo)
 	}
 	return (0);
 }
+
+int thread_join(t_program *program, t_philo *philo)
+{
+	int i = 0;
+	while (i < program->philo_count)
+	{
+		printf("Joining philosopher %d's thread...\n", philo[i].philo_id);
+		if (pthread_join(philo[i].thread, NULL) != 0)
+		{
+			printf("Error joining thread for philosopher %d\n", philo[i].philo_id);
+			return 1;
+		}
+		printf("Philosopher %d's thread has finished.\n", philo[i].philo_id);
+		i++;
+	}
+	return 0;
+}
+

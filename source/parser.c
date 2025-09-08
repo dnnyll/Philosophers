@@ -6,33 +6,38 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 12:13:00 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/08/25 12:13:01 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/08 10:13:06 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int verify_input_args(char **argv)
+int	verify_input_args(char **argv)
 {
-	int	args[5];
+	int	i;
+	int	value;
 
-	args[0] = ft_atoi(argv[1]); // number of philosophers
-	args[1] = ft_atoi(argv[2]); // death time
-	args[2] = ft_atoi(argv[3]); // feasting time
-	args[3] = ft_atoi(argv[4]); // resting time
-	if (argv[5])
-		args[4] = ft_atoi(argv[5]);
-	else
-		args[4] = -1;
-	if (args[0] <= 0 || args[0] > 200)
-		printf("invalid number of philosophers\n");
-	if (args[1] <= 0 || is_valid_digit(argv[2]) == 1)
-		printf("invalid death time\n");
-	if (args[2] <= 0 || is_valid_digit(argv[3]) == 1)
-		printf("invalid feasting time\n");
-	if (args[3] <= 0 || is_valid_digit(argv[4]) == 1)
-		printf("invalid resting time\n");
-	if (argv[5] && (args[4] < 0 || is_valid_digit(argv[5]) == 1))
-		printf("invalid number of times philosophers must feast\n");
+	i = 1;
+	while (argv[i])
+	{
+		if (is_valid_digit(argv[i]))
+		{
+			printf("Invalid characters in argument %d\n", i);
+			return (1);
+		}
+		value = ft_atoi(argv[i]);
+		if (i == 1 && (value <= 0 || value > 200))
+			return (printf("Invalid number of philosophers\n"), 1);
+		if (i == 2 && value <= 0)
+			return (printf("Invalid death time\n"), 1);
+		if (i == 3 && value <= 0)
+			return (printf("Invalid feasting time\n"), 1);
+		if (i == 4 && value <= 0)
+			return (printf("Invalid resting time\n"), 1);
+		if (i == 5 && value < 0)
+			return (printf("Invalid number of meals\n"), 1);
+		i++;
+	}
 	return (0);
 }
+

@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 14:13:29 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/06 09:43:35 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/08 12:07:18 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	init_philo(t_philo *philo, t_program *program)
 	{
 		philo[i].philo_id = i + 1;
 		philo[i].meal_count = 0;
-		philo[i].meal_last = 0;
+		philo[i].meal_last = program->start_time;
 		philo[i].program = program;
 		philo[i].left_fork = &program->forks[i];
 		philo[i].right_fork = &program->forks[(i + 1) % program->philo_count];
@@ -48,18 +48,24 @@ int init_program(t_program *program)
 	int i;
 
 	program->death_flag = 0;
+	program->start_time = get_current_time();
+	// Allocate fork mutexes
 	program->forks = malloc(sizeof(pthread_mutex_t) * program->philo_count);
 	if (!program->forks)
 		return (1);
+	// Initialize print mutex
 	pthread_mutex_init(&program->print_mutex, NULL);
+	// Initialize fork mutexes
 	i = 0;
 	while (i < program->philo_count)
 	{
 		pthread_mutex_init(&program->forks[i], NULL);
 		i++;
 	}
+
 	return (0);
 }
+
 
 t_philo	*allocate_philos(int count)
 {
@@ -78,28 +84,41 @@ t_philo *init_all(t_program *program, char **argv)
 {
 	t_philo *philos;
 
+	// 1. Initialize program input parameters
 	if (init_input(program, argv) != 0)
 	{
 		printf("Error: invalid input.\n");
-		return (NULL);
+		return NULL;
 	}
+
+	// 2. Initialize program (forks + print mutex)
 	if (init_program(program) != 0)
 	{
 		printf("Error: failed to initialize program.\n");
-		return (NULL);
+		return NULL;
 	}
+
+	// 3. Allocate philosophers
 	philos = malloc(sizeof(t_philo) * program->philo_count);
 	if (!philos)
 	{
 		printf("Error: memory allocation failed for philosophers.\n");
-		free_program(program);
-		return (NULL);
+		free(program->forks);
+		return NULL;
 	}
+
+	// 4. Initialize philosophers
 	if (init_philo(philos, program) != 0)
 	{
 		printf("Error: failed to initialize philosophers.\n");
 		free(philos);
-		return (NULL);
+		free(program->forks);
+		return NULL;
 	}
-	return (philos);
+	
+	// 5. Set the program pointer to the philosophers array
+	program->philos = philos;
+
+	return philos;
 }
+

@@ -5,9 +5,11 @@ INCLUDES = include
 SRCS =	source/initialize.c \
 		source/main.c \
 		source/memory_utils.c \
+		source/monitor.c \
 		source/parser.c \
 		source/routine.c \
 		source/threads.c \
+		source/time.c \
 		source/utils.c
 
 OBJS = $(SRCS:.c=.o)

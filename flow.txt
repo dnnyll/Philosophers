@@ -1,0 +1,72 @@
+                     ┌───────────────────────┐
+                     │       Main thread     │
+                     │-----------------------│
+                     │ 1. Parse input        │
+                     │ 2. Initialize program │
+                     │ 3. Initialize forks   │
+                     │ 4. Initialize philo   │
+                     │ 5. thread_create()    │
+                     │ 6. thread_join()      │
+                     │ 7. Cleanup            │
+                     └─────────┬─────────────┘
+                               │
+                               ▼
+                 ┌─────────────────────────────────────┐
+                 │   Philosopher Threads               │
+                 │(philo_routine for each philosopher) │
+                 └──────────────┬──────────────────────┘
+                                │
+      ┌─────────────────────────┼─────────────────────────┐
+      ▼                         ▼                         ▼
+  Philosopher 1               Philosopher 2             Philosopher 3 ...
+  ┌───────────────┐          ┌───────────────┐        ┌───────────────┐
+  │ Think         │          │ Think         │        │ Think         │
+  │ (to_think)    │          │ (to_think)    │        │ (to_think)    │
+  └───────────────┘          └───────────────┘        └───────────────┘
+           │                          │                        │
+           ▼                          ▼                        ▼
+  Take forks & eat                Take forks & eat          Take forks & eat
+  ┌────────────────┐               ┌────────────────┐       ┌────────────────┐
+  │ Lock left/right│               │ Lock left/right│       │ Lock left/right│
+  │ Increment meal │               │ Increment meal │       │ Increment meal │
+  │ Print eating   │               │ Print eating   │       │ Print eating   │
+  │ Unlock forks   │               │ Unlock forks   │       │ Unlock forks   │
+  └────────────────┘               └────────────────┘       └────────────────┘
+           │                          │                        │
+           ▼                          ▼                        ▼
+         Sleep                        Sleep                     Sleep
+      ┌───────────────┐           ┌───────────────┐        ┌───────────────┐
+      │ Print sleeping│           │ Print sleeping│        │ Print sleeping│
+      └───────────────┘           └───────────────┘        └───────────────┘
+           │                          │                        │
+           └──────────── Loop ────────┴───────────── Loop ─────┘
+           (until death_flag=1 or meal_count reached)
+
+
+
+
+MAIN THREAD                  MONITOR THREAD                 PHILOSOPHER THREADS
+   |                              |                               |
+   |---- start_monitor ---------->|                               |
+   |                              |---- starts looping ---------->|
+   |---- thread_create ---------->|                               |---- Philosopher 1
+   |                              |                               |     Think → Eat → Sleep
+   |                              |                               |---- Philosopher 2
+   |                              |                               |     Think → Eat → Sleep
+   |                              |                               |---- Philosopher 3
+   |---- thread_join  ------------|                               |     Think → Eat → Sleep
+   | waits for philo threads      |---- checks meal times ------->|
+   | to finish                    |                               |
+   |                              |                               | Philosopher 1: Think → Eat
+   |                              |                               | Philosopher 2: Think → Eat
+   |                              |                               | Philosopher 3: Think → Eat
+   |                              |                               |
+   |                              | Philosopher 1 exceeds time_to_die at 102ms
+   |                              |---- sets death_flag=1 ------->|
+   |                              |---- exits monitor ----------->|
+   |                              |                               | Philosopher 2 sees death_flag → exits
+   |                              |                               | Philosopher 3 sees death_flag → exits
+   | philosopher threads finish   |                               |
+   | thread_join unblocks one by one ---------------------------->|
+   | main() returns → program exits ----------------------------->|
+
