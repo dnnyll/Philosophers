@@ -50,6 +50,7 @@ t_philo	*init_all(t_program *program, char **argv);
 void	free_program(t_program *program);
 
 //	monitor.c
+void sleep_monitor(long long duration, t_program *program);
 int start_monitor(t_program *program);
 void *monitor_routine(void *arg);
 
@@ -57,6 +58,11 @@ void *monitor_routine(void *arg);
 int	verify_input_args(char **input);
 
 //	routine.c
+void print_action(t_philo *philo, const char *action);
+void take_forks(t_philo *philo);
+void release_forks(t_philo *philo);
+
+
 void	to_think(t_philo *philo);
 void	to_eat(t_philo *philo);
 void	to_sleep(t_philo *philo);

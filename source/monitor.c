@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 10:32:19 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/08 14:44:41 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/09 14:21:40 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,30 +38,28 @@
 */
 #include "philosophers.h"
 
-// void	print_message(char *str, t_philo *philo, int id)
-// {
-// 	size_t	time;
+void	sleep_monitor(long long duration, t_program *program)
+{
+	long long	start = get_current_time();
+	while (get_current_time() - start < duration)
+	{
+		if (program->death_flag)
+			break ;
+		usleep(1000);
+	}
+}
 
-// 	pthread_mutex_lock(philo->write_lock);
-// 	time = get_current_time() - philo->start_time;
-// 	if (!dead_loop(philo))
-// 		printf("%zu %d %s\n", time, id, str);
-// 	pthread_mutex_unlock(philo->write_lock);
-// }
-int start_monitor(t_program *program)
+int	start_monitor(t_program *program)
 {
 	pthread_t monitor_thread;
 
-	// Create a separate thread for the monitor routine
 	if (pthread_create(&monitor_thread, NULL, monitor_routine, program) != 0)
 	{
 		printf("Error: failed to create monitor thread.\n");
 		return 1;
 	}
-
-	// We don't need to join the monitor because we want it to run independently
 	pthread_detach(monitor_thread);
-	return 0;
+	return (0);
 }
 
 void *monitor_routine(void *arg)
@@ -74,20 +72,27 @@ void *monitor_routine(void *arg)
 		i = 0;
 		while (i < program->philo_count)
 		{
+			t_philo *philo = &program->philos[i];
+
+			// Skip philosophers that already finished their meals
+			if (program->times_to_eat != -1 && philo->meal_count >= program->times_to_eat)
+			{
+				i++;
+				continue;
+			}
 			long long current_time = get_current_time();
-			// Check if this philosopher has exceeded time_to_die
-			if (current_time - program->philos[i].meal_last > program->time_to_die)
+			if (current_time - philo->meal_last > program->time_to_die)
 			{
 				pthread_mutex_lock(&program->print_mutex);
 				printf("[%lld ms] Philosopher %d died\n",
 					current_time - program->start_time,
-					program->philos[i].philo_id);
+					philo->philo_id);
 				pthread_mutex_unlock(&program->print_mutex);
 				program->death_flag = 1;
-				return NULL; // stop monitor
+				return NULL;
 			}
 			i++;
-		}
+}
 		// Reduce CPU usage
 		usleep(1000); // 1ms
 	}
