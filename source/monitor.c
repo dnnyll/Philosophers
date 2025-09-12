@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 10:32:19 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/09 14:21:40 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/12 15:29:13 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,11 +92,11 @@ void *monitor_routine(void *arg)
 				return NULL;
 			}
 			i++;
-}
+		}
 		// Reduce CPU usage
 		usleep(1000); // 1ms
 	}
-	return NULL;
+	return (NULL);
 }
 
 
