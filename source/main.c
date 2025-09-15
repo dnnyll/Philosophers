@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 12:12:56 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/12 15:27:29 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/15 16:35:38 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,22 @@ int	main(int argc, char **argv)
 	philo = init_all(&program, argv);
 	if (!philo)
 		return (1);
-	if (start_monitor(&program) != 0)
-	{
-		printf("Error: monitor thread failed.\n");
-		return (1);
-	}
 	if (thread_create(&program, philo) != 0)
 	{
 		printf("Error: thread creation failed.\n");
+		return (1);
+	}
+	// 2. Initialize start time AFTER threads exist
+	program.start_time = get_current_time();
+	int i = 0;
+	while (i < program.philo_count)
+	{
+		program.philos[i].meal_last = program.start_time;
+		i++;
+	}
+	if (start_monitor(&program) != 0)
+	{
+		printf("Error: monitor thread failed.\n");
 		return (1);
 	}
 	if (thread_join(&program, philo) != 0)

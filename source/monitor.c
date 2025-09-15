@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 10:32:19 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/12 15:29:13 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/15 15:52:02 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,14 @@
 
 void	sleep_monitor(long long duration, t_program *program)
 {
-	long long	start = get_current_time();
+	long long	start;
+	
+	start = get_current_time();
 	while (get_current_time() - start < duration)
 	{
 		if (program->death_flag)
 			break ;
-		usleep(1000);
+		usleep(150);
 	}
 }
 
@@ -56,7 +58,7 @@ int	start_monitor(t_program *program)
 	if (pthread_create(&monitor_thread, NULL, monitor_routine, program) != 0)
 	{
 		printf("Error: failed to create monitor thread.\n");
-		return 1;
+		return (1);
 	}
 	pthread_detach(monitor_thread);
 	return (0);
@@ -65,7 +67,8 @@ int	start_monitor(t_program *program)
 void *monitor_routine(void *arg)
 {
 	t_program *program = (t_program *)arg;
-	int i;
+	int	i;
+	long long current_time;
 
 	while (program->death_flag == 0)
 	{
@@ -73,14 +76,13 @@ void *monitor_routine(void *arg)
 		while (i < program->philo_count)
 		{
 			t_philo *philo = &program->philos[i];
-
 			// Skip philosophers that already finished their meals
 			if (program->times_to_eat != -1 && philo->meal_count >= program->times_to_eat)
 			{
 				i++;
-				continue;
+				continue ;
 			}
-			long long current_time = get_current_time();
+			current_time = get_current_time();
 			if (current_time - philo->meal_last > program->time_to_die)
 			{
 				pthread_mutex_lock(&program->print_mutex);
@@ -93,8 +95,7 @@ void *monitor_routine(void *arg)
 			}
 			i++;
 		}
-		// Reduce CPU usage
-		usleep(1000); // 1ms
+		usleep(10);
 	}
 	return (NULL);
 }

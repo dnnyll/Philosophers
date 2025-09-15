@@ -15,11 +15,10 @@ typedef struct s_philo
 	int				philo_id;
 	int				meal_count;
 	long long		meal_last;
-	int				meal_limit;	//flag to identify if max number of meals have been reached
+	int				meal_limit;
 	pthread_t		thread;
-	// pthread_mutex_t	*fork_lock;
-	pthread_mutex_t	*left_fork;		//int?
-	pthread_mutex_t	*right_fork;	//int?
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
 	t_program		*program;
 }	t_philo;
 
@@ -30,15 +29,11 @@ typedef struct	s_program
 	long long		time_to_eat;
 	long long		time_to_sleep;
 	int				times_to_eat;
-	long long		start_time; //(when sim begins → for timestamps).
-	int				start_flag;
+	long long		start_time;
 	int				death_flag;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_mutex;
 	t_philo			*philos;
-	// pthread_mutex_t *forks; (array of mutexes, one per fork).
-	// pthread_mutex_t print_lock; (so logs don’t overlap).
-	// int dead_flag; (stop program when someone dies).
 }	t_program;
 
 //	initialize.c
