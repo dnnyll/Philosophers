@@ -31,6 +31,7 @@ typedef struct	s_program
 	long long		time_to_sleep;
 	int				times_to_eat;
 	long long		start_time; //(when sim begins → for timestamps).
+	int				start_flag;
 	int				death_flag;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_mutex;

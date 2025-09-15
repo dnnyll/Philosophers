@@ -6,11 +6,21 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 16:37:45 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/12 15:22:36 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/15 09:33:45 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+int	philo_sync(t_program *program, t_philo *philo)
+{
+	while (progmra->start_flag != 1)
+	{
+		wait
+	}
+	return (0);
+}
+
 
 void print_action(t_philo *philo, const char *action)
 {
@@ -67,20 +77,18 @@ void	to_think(t_philo *philo)
 	sleep_monitor(50, program);
 }
 
-void to_eat(t_philo *philo)
+void	to_eat(t_philo *philo)
 {
 	t_program *program = philo->program;
 	if (program->death_flag)
 	return ;
 	
-	take_forks(philo); // lock forks + print fork actions
-	
+	take_forks(philo);
 	philo->meal_last = get_current_time();
 	philo->meal_count++;
-	
 	print_action(philo, "is eating");
 	// printf("meal_count: %d\n", philo->meal_count);
-	sleep_monitor(program->time_to_eat, program); // responsive sleep
+	sleep_monitor(program->time_to_eat, program);
 	release_forks(philo); // unlock forks
 }
 
@@ -105,6 +113,7 @@ void	*philo_routine(void *arg)
 	while (!program->death_flag &&
 		(program->times_to_eat == -1 || philo->meal_count < program->times_to_eat))
 		{
+			philo_sync() ???
 			if (program->death_flag) break;
 			to_eat(philo);   // take forks, eat, release forks
 			if (program->death_flag) break;
