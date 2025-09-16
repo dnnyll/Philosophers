@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 16:37:45 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/15 16:48:01 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/16 13:30:36 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,9 @@
 
 void print_action(t_philo *philo, const char *action)
 {
-	t_program *program = philo->program;
+	t_program *program;
 
-	// if (program->death_flag)
-	// 	return ;
-
+	program = philo->program;
 	pthread_mutex_lock(&program->print_mutex); 	// Lock the print mutex to avoid overlapping prints
 	if (!program->death_flag)
 		printf("%lld Philosopher %d %s\n",
@@ -30,19 +28,13 @@ void print_action(t_philo *philo, const char *action)
 
 void take_forks(t_philo *philo)
 {
-	// if(philo->program->philo_count == 1)
-	// {
-	// 	pthread_mutex_lock(philo->left_fork);
-	// 	print_action(philo, "has taken a fork");
-	// 	// usleep(philo->program->time_to_die * 1000);
-	// 	pthread_mutex_unlock(philo->left_fork);
-	// 	return ;
-	// }
 	if (philo->philo_id % 2 == 0)
 	{
 		pthread_mutex_lock(philo->right_fork);
+		// left_fork = 1;
 		print_action(philo, "has taken a fork");
 		pthread_mutex_lock(philo->left_fork);
+		// right fork = 1
 		print_action(philo, "has taken a fork");
 	}
 	else
@@ -56,11 +48,6 @@ void take_forks(t_philo *philo)
 
 void	release_forks(t_philo *philo)
 {
-	// if(philo->program->philo_count == 1)
-	// {
-	// 	pthread_mutex_unlock(philo->left_fork);
-	// 	return ;
-	// }
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 }
@@ -70,8 +57,6 @@ void	to_think(t_philo *philo)
 	t_program *program;
 	
 	program = philo->program;
-	// if (program->death_flag)
-	// 	return ;
 	pthread_mutex_lock(&program->print_mutex);
 	if (!program->death_flag)
 		printf("%lld Philosopher %d is thinking\n",
@@ -86,10 +71,7 @@ void	to_eat(t_philo *philo)
 	t_program *program;
 
 	program = philo->program;
-	// if (program->death_flag)
-	// return ;
 	take_forks(philo);
-	
 	philo->meal_last = get_current_time();
 	philo->meal_count++;
 	print_action(philo, "is eating");
@@ -110,19 +92,31 @@ void	to_sleep(t_philo *philo)
 
 void	*philo_routine(void *arg)
 {
-	t_philo *philo = (t_philo *)arg;
-	t_program *program = philo->program;
+	t_philo *philo;
+	t_program *program;
 	
+	philo = (t_philo *)arg;
+	program = philo->program;
+	if(program->philo_count == 1)
+	{
+		pthread_mutex_lock(philo->left_fork);
+		print_action(philo, "has taken a fork");
+		pthread_mutex_unlock(philo->left_fork);
+		sleep_monitor(program->time_to_die, program);
+		printf("[%lld ms] Philosopher %d died\n",
+					program->time_to_die,
+					philo->philo_id);
+		return (NULL);
+	}
 	if (philo->philo_id % 2 == 0)
 		usleep(20);
 	while (!program->death_flag &&
 		(program->times_to_eat == -1 || philo->meal_count < program->times_to_eat))
 	{
 		to_eat(philo);
-		to_sleep(philo);
+		// fork_left = 0
+		// to_sleep(philo);
 		to_think(philo);
-		// if (program->death_flag)
-		// 	break ;
 	}
 	return (NULL);
 }

@@ -19,6 +19,7 @@ typedef struct s_philo
 	pthread_t		thread;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
+	pthread_mutex_t meal_mutex;
 	t_program		*program;
 }	t_philo;
 
@@ -32,9 +33,17 @@ typedef struct	s_program
 	long long		start_time;
 	int				death_flag;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	death_mutex;
 	pthread_mutex_t	print_mutex;
 	t_philo			*philos;
 }	t_program;
+
+
+void	thread_clean(t_program *program);
+void cleanup(t_program *program);
+void free_all(t_program *program);
+int check_philo_death(t_philo *philo, t_program *program);
+
 
 //	initialize.c
 int		init_input(t_program *program, char **argv);

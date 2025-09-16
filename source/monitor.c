@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 10:32:19 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/15 15:52:02 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/16 13:29:38 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,11 @@ void	sleep_monitor(long long duration, t_program *program)
 	start = get_current_time();
 	while (get_current_time() - start < duration)
 	{
+		// printf("1\n");
+		// printf("%d\n", )
 		if (program->death_flag)
 			break ;
-		usleep(150);
+		usleep(10);
 	}
 }
 
@@ -66,6 +68,7 @@ int	start_monitor(t_program *program)
 
 void *monitor_routine(void *arg)
 {
+	printf("2\n");
 	t_program *program = (t_program *)arg;
 	int	i;
 	long long current_time;

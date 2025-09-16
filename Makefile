@@ -1,4 +1,4 @@
-NAME = philoshopers
+NAME = philosophers
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 INCLUDES = include

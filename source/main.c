@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 12:12:56 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/15 16:35:38 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/16 11:48:28 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,18 +60,15 @@ int	main(int argc, char **argv)
 		program.philos[i].meal_last = program.start_time;
 		i++;
 	}
-	if (start_monitor(&program) != 0)
-	{
-		printf("Error: monitor thread failed.\n");
-		return (1);
-	}
+	if (program.philo_count > 1)
+		start_monitor(&program);
 	if (thread_join(&program, philo) != 0)
 	{
 		printf("Error: thread join failed.\n");
 		return (1);
 	}
-	// 4. Cleanup mutexes, free memory
-	// cleanup(&program, philo);
+	cleanup(&program);
+	free_all(&program);
 	return (0);
 }
 

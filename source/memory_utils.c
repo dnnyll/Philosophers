@@ -6,15 +6,16 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 09:40:41 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/06 09:49:43 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/16 11:43:45 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+#include "philosophers.h"
 
-void	free_program(t_program *program)
+void	cleanup(t_program *program)
 {
-	int	i;
+	int i;
 
 	if (!program)
 		return;
@@ -27,6 +28,28 @@ void	free_program(t_program *program)
 			i++;
 		}
 		free(program->forks);
+		program->forks = NULL;
 	}
 	pthread_mutex_destroy(&program->print_mutex);
+	if (program->philos)
+	{
+		free(program->philos);
+		program->philos = NULL;
+	}
+}
+
+void	free_all(t_program *program)
+{
+	if (!program)
+		return ;
+	if (program->forks)
+	{
+		free(program->forks);
+		program->forks = NULL;
+	}
+	if (program->philos)
+	{
+		free(program->philos);
+		program->philos = NULL;
+	}
 }
