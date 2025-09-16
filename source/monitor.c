@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 10:32:19 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/16 13:29:38 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/16 16:33:55 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,38 @@
 */
 #include "philosophers.h"
 
+
+
+// void	sleep_monitor(long long duration, t_program *program)
+// {
+// 	long long	start;
+	
+// 	start = get_current_time();
+// 	while (get_current_time() - start < duration)
+// 	{
+// 		if (program->death_flag)
+// 			break ;
+// 		usleep(10);
+// 	}
+// }
 void	sleep_monitor(long long duration, t_program *program)
 {
 	long long	start;
-	
+	long long	current;
+	int			dead;
+
 	start = get_current_time();
-	while (get_current_time() - start < duration)
+	current = start;
+	dead = 0;
+	while (current - start < duration)
 	{
-		// printf("1\n");
-		// printf("%d\n", )
-		if (program->death_flag)
+		pthread_mutex_lock(&program->death_mutex);
+		dead = program->death_flag;
+		pthread_mutex_unlock(&program->death_mutex);
+		if (dead)
 			break ;
 		usleep(10);
+		current = get_current_time();
 	}
 }
 
@@ -66,36 +86,47 @@ int	start_monitor(t_program *program)
 	return (0);
 }
 
-void *monitor_routine(void *arg)
+int	check_philo_death(t_philo *philo, t_program *program)
 {
-	printf("2\n");
-	t_program *program = (t_program *)arg;
-	int	i;
-	long long current_time;
+	long long	current_time;
+	int			died;
 
-	while (program->death_flag == 0)
+	pthread_mutex_lock(&philo->meal_mutex);
+	current_time = get_current_time();
+	died = (current_time - philo->meal_last > program->time_to_die);
+	pthread_mutex_unlock(&philo->meal_mutex);
+	if (died)
+	{
+		pthread_mutex_lock(&program->print_mutex);
+		printf("[%lld ms] Philosopher %d died\n",
+			current_time - program->start_time,
+			philo->philo_id);
+		pthread_mutex_unlock(&program->print_mutex);
+		pthread_mutex_lock(&program->death_mutex);
+		program->death_flag = 1;
+		pthread_mutex_unlock(&program->death_mutex);
+	}
+	return (died);
+}
+
+void	*monitor_routine(void *arg)
+{
+	t_program	*program;
+	int			i;
+
+	program = (t_program *)arg;
+	while (!program->death_flag)
 	{
 		i = 0;
 		while (i < program->philo_count)
 		{
-			t_philo *philo = &program->philos[i];
-			// Skip philosophers that already finished their meals
-			if (program->times_to_eat != -1 && philo->meal_count >= program->times_to_eat)
+			if (program->times_to_eat != -1 && program->philos[i].meal_count >= program->times_to_eat)
 			{
 				i++;
 				continue ;
 			}
-			current_time = get_current_time();
-			if (current_time - philo->meal_last > program->time_to_die)
-			{
-				pthread_mutex_lock(&program->print_mutex);
-				printf("[%lld ms] Philosopher %d died\n",
-					current_time - program->start_time,
-					philo->philo_id);
-				pthread_mutex_unlock(&program->print_mutex);
-				program->death_flag = 1;
-				return NULL;
-			}
+			if (check_philo_death(&program->philos[i], program))
+				return (NULL);
 			i++;
 		}
 		usleep(10);
@@ -104,3 +135,56 @@ void *monitor_routine(void *arg)
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// other
+
+
+// void *monitor_routine(void *arg)
+// {
+// 	printf("2\n");
+// 	t_program *program = (t_program *)arg;
+// 	int	i;
+// 	long long current_time;
+
+// 	while (program->death_flag == 0)
+// 	{
+// 		i = 0;
+// 		while (i < program->philo_count)
+// 		{
+// 			t_philo *philo = &program->philos[i];
+// 			// Skip philosophers that already finished their meals
+// 			if (program->times_to_eat != -1 && philo->meal_count >= program->times_to_eat)
+// 			{
+// 				i++;
+// 				continue ;
+// 			}
+// 			current_time = get_current_time();
+// 			if (current_time - philo->meal_last > program->time_to_die)
+// 			{
+// 				pthread_mutex_lock(&program->print_mutex);
+// 				printf("[%lld ms] Philosopher %d died\n",
+// 					current_time - program->start_time,
+// 					philo->philo_id);
+// 				pthread_mutex_unlock(&program->print_mutex);
+// 				program->death_flag = 1;
+// 				return NULL;
+// 			}
+// 			i++;
+// 		}
+// 		usleep(10);
+// 	}
+// 	return (NULL);
+// }

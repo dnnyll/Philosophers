@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 14:13:29 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/16 13:29:54 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/16 16:09:15 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	init_philo(t_philo *philo, t_program *program)
 		philo[i].program = program;
 		philo[i].left_fork = &program->forks[i];
 		philo[i].right_fork = &program->forks[(i + 1) % program->philo_count];
-		// pthread_mutex_init(&philo[i].meal_mutex, NULL);
+		pthread_mutex_init(&philo[i].meal_mutex, NULL);
 		i++;
 	}
 	return (0);
@@ -53,8 +53,9 @@ int	init_program(t_program *program)
 	program->forks = malloc(sizeof(pthread_mutex_t) * program->philo_count);
 	if (!program->forks)
 		return (1);
-	// pthread_mutex_init(&program->death_mutex, NULL);
+	pthread_mutex_init(&program->death_mutex, NULL);
 	pthread_mutex_init(&program->print_mutex, NULL);
+	// pthread_mutex_init(&program->start_mutex, NULL);
 	i = 0;
 	while (i < program->philo_count)
 	{

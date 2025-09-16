@@ -7,6 +7,8 @@ SRCS =	source/initialize.c \
 		source/memory_utils.c \
 		source/monitor.c \
 		source/parser.c \
+		source/print.c \
+		source/routine_actions.c \
 		source/routine.c \
 		source/threads.c \
 		source/time.c \

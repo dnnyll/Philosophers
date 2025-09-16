@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 09:40:41 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/16 11:43:45 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/16 15:51:09 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	cleanup(t_program *program)
 	int i;
 
 	if (!program)
-		return;
+		return ;
 	if (program->forks)
 	{
 		i = 0;
@@ -31,8 +31,15 @@ void	cleanup(t_program *program)
 		program->forks = NULL;
 	}
 	pthread_mutex_destroy(&program->print_mutex);
+	// pthread_mutex_destroy(&program->death_mutex);
 	if (program->philos)
 	{
+		i = 0;
+		while (i < program->philo_count)
+		{
+			pthread_mutex_destroy(&program->philos[i].meal_mutex);
+			i++;
+		}
 		free(program->philos);
 		program->philos = NULL;
 	}

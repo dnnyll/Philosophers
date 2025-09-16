@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 15:17:49 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/16 11:48:42 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/16 14:15:28 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,20 @@ void *arg
 	Pointer to an argument passed to the start_routine function.
 	Can be NULL if no argument is needed.
 */
-void	thread_clean(t_program *program)
-{
-	int	i;
+// void	thread_clean(t_program *program)
+// {
+// 	int	i;
 
-	i = 0;
-	while (i < program->philo_count)
-	{
-		pthread_mutex_destroy(&program->forks[i]);
-		i++;
-	}
-	pthread_mutex_destroy(&program->print_mutex);
-	free(program->forks);
-	free(program->philos);
-}
+// 	i = 0;
+// 	while (i < program->philo_count)
+// 	{
+// 		pthread_mutex_destroy(&program->forks[i]);
+// 		i++;
+// 	}
+// 	pthread_mutex_destroy(&program->print_mutex);
+// 	free(program->forks);
+// 	free(program->philos);
+// }
 
 int	thread_create(t_program *program, t_philo *philo)
 {

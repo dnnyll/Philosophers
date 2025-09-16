@@ -148,3 +148,8 @@ This logic goes inside the eating routine, not during initialization.
    │ - philosophers that never eat enough                            │
    │ - Maximum times_to_eat argument                                 │
    └───────────────────────────────────────────────────────────────┘
+
+
+
+valgrind --tool=helgrind ./philosophers 5 400 200 200
+valgrind --tool=helgrind --track-lockorders=yes --history-level=full ./philosophers 5 800 200 200

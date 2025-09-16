@@ -43,11 +43,12 @@ void	thread_clean(t_program *program);
 void cleanup(t_program *program);
 void free_all(t_program *program);
 int check_philo_death(t_philo *philo, t_program *program);
+int	should_continue(t_program *program);
 
 
 //	initialize.c
 int		init_input(t_program *program, char **argv);
-int	init_philo(t_philo *philo, t_program *program);
+int		init_philo(t_philo *philo, t_program *program);
 int		init_program(t_program *program);
 t_philo	*init_all(t_program *program, char **argv);
 
@@ -55,9 +56,9 @@ t_philo	*init_all(t_program *program, char **argv);
 void	free_program(t_program *program);
 
 //	monitor.c
-void sleep_monitor(long long duration, t_program *program);
-int start_monitor(t_program *program);
-void *monitor_routine(void *arg);
+void	sleep_monitor(long long duration, t_program *program);
+int		start_monitor(t_program *program);
+void	*monitor_routine(void *arg);
 
 //	parser.c
 int	verify_input_args(char **input);
