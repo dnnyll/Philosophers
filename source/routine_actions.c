@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 16:51:08 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/17 09:47:30 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/17 16:55:33 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,13 @@ void	to_think(t_philo *philo)
 	program = philo->program;
 	pthread_mutex_lock(&program->print_mutex);
 	// pthread_mutex_lock(&program->death_mutex);
-	if (!should_continue(program))
+	if (should_continue(program))
 		printf("%lld Philosopher %d is thinking\n",
 			get_current_time() - program->start_time,
 			philo->philo_id);
 	// pthread_mutex_unlock(&program->death_mutex);
 	pthread_mutex_unlock(&program->print_mutex);
-	sleep_monitor(10, program);
+	sleep_monitor(5, program);
 }
 
 void	to_eat(t_philo	*philo)
@@ -76,11 +76,8 @@ void	to_sleep(t_philo *philo)
 
 	program = philo->program;
 	// pthread_mutex_lock(&program->death_mutex);
-	if (!should_continue(program))
-	{
-		// pthread_mutex_unlock(&program->death_mutex);
-		return ;
-	}
+	// if (!should_continue(program))
+	// 	return ;
 	// pthread_mutex_unlock(&program->death_mutex);
 	print_action(philo, "is sleeping");
 	sleep_monitor(program->time_to_sleep, program);

@@ -41,6 +41,7 @@ typedef struct	s_program
 	t_philo			*philos;
 }	t_program;
 
+void	philo_solo(t_program *program, t_philo *philo);
 
 void	thread_clean(t_program *program);
 void cleanup(t_program *program);

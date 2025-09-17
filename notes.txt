@@ -153,3 +153,4 @@ This logic goes inside the eating routine, not during initialization.
 
 valgrind --tool=helgrind ./philosophers 5 400 200 200
 valgrind --tool=helgrind --track-lockorders=yes --history-level=full ./philosophers 5 800 200 200
+valgrind -s --leak-check=full --show-leak-kinds=all --track-fds=all ./philosophers 4 400 200 200

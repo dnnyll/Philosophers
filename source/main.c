@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 12:12:56 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/17 11:29:51 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/17 16:58:20 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,8 @@ int	main(int argc, char **argv)
 	if (program.philo_count > 1)
 		start_monitor(&program);
 	thread_join(&program, philo);
-	cleanup(&program);
-	free_all(&program);
+	// cleanup(&program);
+	// free_all(&program);
 	return (0);
 }
 

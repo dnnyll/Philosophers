@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 10:32:19 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/17 11:31:32 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/17 16:56:18 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	sleep_monitor(long long duration, t_program *program)
 		pthread_mutex_unlock(&program->death_mutex);
 		if (dead)
 			break ;
-		usleep(10);
+		usleep(100);
 		current = get_current_time();
 	}
 }
@@ -58,12 +58,13 @@ int	check_philo_death(t_philo *philo, t_program *program)
 	pthread_mutex_unlock(&philo->meal_mutex);
 	if (died)
 	{
-		pthread_mutex_lock(&program->print_mutex);
+		// pthread_mutex_lock(&program->print_mutex);
 		temp_start_time = program->start_time;
-		printf("[%lld ms] Philosopher %d died\n",
-			current_time - temp_start_time,
-			philo->philo_id);
-		pthread_mutex_unlock(&program->print_mutex);
+		print_action(philo, "died");
+		// printf("[%lld ms] Philosopher %d died\n",
+		// 	current_time - temp_start_time,
+		// 	philo->philo_id);
+		// pthread_mutex_unlock(&program->print_mutex);
 		pthread_mutex_lock(&program->death_mutex);
 		program->death_flag = 1;
 		pthread_mutex_unlock(&program->death_mutex);
@@ -91,7 +92,7 @@ void	*monitor_routine(void *arg)
 				return (NULL);
 			i++;
 		}
-		usleep(10);
+		usleep(100);
 	}
 	return (NULL);
 }

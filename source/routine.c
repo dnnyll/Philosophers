@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 16:37:45 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/17 11:06:46 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/17 16:01:40 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,19 @@ int	should_continue(t_program *program)
 	pthread_mutex_unlock(&program->death_mutex);
 	return (flag);
 }
+void	philo_solo(t_program *program, t_philo *philo)
+{
+		pthread_mutex_lock(philo->left_fork);
+		print_action(philo, "has taken a fork");
+		pthread_mutex_unlock(philo->left_fork);
+		sleep_monitor(program->time_to_die, program);
+		print_action(philo, "died");
+		// death_flag mutex = 1
+		// printf("[%lld ms] Philosopher %d died\n",
+		// 			program->time_to_die,
+		// 			philo->philo_id);
+		return ;
+}
 
 void	*philo_routine(void *arg)
 {
@@ -34,33 +47,35 @@ void	*philo_routine(void *arg)
 	temp_meal_count = philo->meal_count;
 	pthread_mutex_unlock(&philo->meal_mutex);
 	if(program->philo_count == 1)
-	{
-		pthread_mutex_lock(philo->left_fork);
-		print_action(philo, "has taken a fork");
-		pthread_mutex_unlock(philo->left_fork);
-		sleep_monitor(program->time_to_die, program);
-		printf("[%lld ms] Philosopher %d died\n",
-					program->time_to_die,
-					philo->philo_id);
-		return (NULL);
-	}
+		philo_solo(program, philo);
 	if (philo->philo_id % 2 == 0)
-		usleep(10);
-	while (should_continue(program) &&
-		(program->times_to_eat == -1 || temp_meal_count < program->times_to_eat))
+		usleep(5);
+	while (should_continue(program))
 	{
-		if(!should_continue(program))
-			break;
+		pthread_mutex_lock(&philo->meal_mutex);
+		temp_meal_count = philo->meal_count;
+		pthread_mutex_unlock(&philo->meal_mutex);
+		if (program->times_to_eat != -1 && temp_meal_count >= program->times_to_eat)
+			break ;
 		to_eat(philo);
-		if(!should_continue(program))
-			break;
-		// fork_left = 0
 		to_sleep(philo);
-		if(!should_continue(program))
-			break;
 		to_think(philo);
-		if(!should_continue(program))
-			break;
 	}
+	// while (should_continue(program) &&
+	// 	(program->times_to_eat == -1 || temp_meal_count < program->times_to_eat))
+	// {
+	// 	// if(!should_continue(program))
+	// 	// 	break;
+	// 	to_eat(philo);
+	// 	// if(!should_continue(program))
+	// 	// 	break;
+	// 	// fork_left = 0
+	// 	to_sleep(philo);
+	// 	// if(!should_continue(program))
+	// 	// 	break;
+	// 	to_think(philo);
+	// 	// if(!should_continue(program))
+	// 	// 	break;
+	// }
 	return (NULL);
 }
