@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 16:37:45 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/16 16:52:33 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/17 09:52:18 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,13 @@ void	*philo_routine(void *arg)
 {
 	t_philo		*philo;
 	t_program	*program;
+	int			temp_meal_count;
 	
 	philo = (t_philo *)arg;
 	program = philo->program;
+	pthread_mutex_lock(&philo->meal_mutex);
+	temp_meal_count = philo->meal_count;
+	pthread_mutex_unlock(&philo->meal_mutex);
 	if(program->philo_count == 1)
 	{
 		pthread_mutex_lock(philo->left_fork);
@@ -43,7 +47,7 @@ void	*philo_routine(void *arg)
 	if (philo->philo_id % 2 == 0)
 		usleep(20);
 	while (should_continue(program) &&
-		(program->times_to_eat == -1 || philo->meal_count < program->times_to_eat))
+		(program->times_to_eat == -1 || temp_meal_count < program->times_to_eat))
 	{
 		if(!should_continue(program))
 			break;

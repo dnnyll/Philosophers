@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 12:12:56 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/16 16:12:20 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/17 10:05:40 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 static int	init_start(t_program *program, t_philo *philo)
 {
 	int	i;
+	
 	pthread_mutex_lock(&philo->meal_mutex);
 	program->start_time = get_current_time();
 	pthread_mutex_unlock(&philo->meal_mutex);

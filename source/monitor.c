@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 10:32:19 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/16 16:33:55 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/17 10:19:56 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	sleep_monitor(long long duration, t_program *program)
 
 int	start_monitor(t_program *program)
 {
-	pthread_t monitor_thread;
+	pthread_t	monitor_thread;
 
 	if (pthread_create(&monitor_thread, NULL, monitor_routine, program) != 0)
 	{
@@ -89,6 +89,7 @@ int	start_monitor(t_program *program)
 int	check_philo_death(t_philo *philo, t_program *program)
 {
 	long long	current_time;
+	long long	temp_start_time;
 	int			died;
 
 	pthread_mutex_lock(&philo->meal_mutex);
@@ -98,8 +99,9 @@ int	check_philo_death(t_philo *philo, t_program *program)
 	if (died)
 	{
 		pthread_mutex_lock(&program->print_mutex);
+		temp_start_time = program->start_time;
 		printf("[%lld ms] Philosopher %d died\n",
-			current_time - program->start_time,
+			current_time - temp_start_time,
 			philo->philo_id);
 		pthread_mutex_unlock(&program->print_mutex);
 		pthread_mutex_lock(&program->death_mutex);
@@ -115,7 +117,7 @@ void	*monitor_routine(void *arg)
 	int			i;
 
 	program = (t_program *)arg;
-	while (!program->death_flag)
+	while (should_continue(program))
 	{
 		i = 0;
 		while (i < program->philo_count)

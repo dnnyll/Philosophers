@@ -35,6 +35,7 @@ typedef struct	s_program
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	death_mutex;
 	pthread_mutex_t	print_mutex;
+	// pthread_mutex_t	start_mutex;
 	t_philo			*philos;
 }	t_program;
 
@@ -44,7 +45,7 @@ void cleanup(t_program *program);
 void free_all(t_program *program);
 int check_philo_death(t_philo *philo, t_program *program);
 int	should_continue(t_program *program);
-
+long long	get_start_time(t_program *program);
 
 //	initialize.c
 int		init_input(t_program *program, char **argv);
