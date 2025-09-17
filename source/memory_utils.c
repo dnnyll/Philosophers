@@ -6,16 +6,15 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 09:40:41 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/16 15:51:09 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/17 11:31:38 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
-#include "philosophers.h"
 
 void	cleanup(t_program *program)
 {
-	int i;
+	int	i;
 
 	if (!program)
 		return ;

@@ -6,52 +6,12 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 10:32:19 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/17 10:19:56 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/17 11:31:32 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
-			Simulation starts
-			┌─────────────┐
-			│ Main thread │
-			└───┬─────────┘
-				│
-				│ Create philosopher threads (think/eat/sleep)
-				│
-				│ Create monitor thread
-				▼
-			┌────────────────┐
-			│ Monitor thread │
-			└───┬────────────┘
-				│
-				├─ continuously checks each philosopher:
-				│     current_time - meal_last > time_to_die?
-				│
-				├─ If YES:
-				│     print death
-				│     death_flag = 1
-				│     exit monitor
-				│
-				└─ If NO:
-						wait 1ms → repeat
-
-*/
 #include "philosophers.h"
 
-
-
-// void	sleep_monitor(long long duration, t_program *program)
-// {
-// 	long long	start;
-	
-// 	start = get_current_time();
-// 	while (get_current_time() - start < duration)
-// 	{
-// 		if (program->death_flag)
-// 			break ;
-// 		usleep(10);
-// 	}
-// }
 void	sleep_monitor(long long duration, t_program *program)
 {
 	long long	start;

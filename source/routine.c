@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 16:37:45 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/17 09:52:18 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/17 11:06:46 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	*philo_routine(void *arg)
 		return (NULL);
 	}
 	if (philo->philo_id % 2 == 0)
-		usleep(20);
+		usleep(10);
 	while (should_continue(program) &&
 		(program->times_to_eat == -1 || temp_meal_count < program->times_to_eat))
 	{

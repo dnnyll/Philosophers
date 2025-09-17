@@ -32,9 +32,11 @@ typedef struct	s_program
 	int				times_to_eat;
 	long long		start_time;
 	int				death_flag;
+	int				threads_ready;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	death_mutex;
 	pthread_mutex_t	print_mutex;
+	// pthread_mutex_t	ready_mutex;
 	// pthread_mutex_t	start_mutex;
 	t_philo			*philos;
 }	t_program;
