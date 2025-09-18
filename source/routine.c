@@ -6,21 +6,49 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 16:37:45 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/17 16:01:40 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/18 11:26:43 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
+static int	check_meals_done(t_program *program, t_philo *philo)
+{
+	pthread_mutex_lock(&philo->meal_mutex);
+	if (program->times_to_eat != -1 && philo->meal_count >= program->times_to_eat)
+	{
+		pthread_mutex_unlock(&philo->meal_mutex);
+		return 1; // this philosopher is done
+	}
+	pthread_mutex_unlock(&philo->meal_mutex);
+	return 0; // still needs to eat
+}
+
 int	should_continue(t_program *program)
 {
-	int	flag;
+	int	continue_flag;
 
 	pthread_mutex_lock(&program->death_mutex);
-	flag = !program->death_flag;
+	continue_flag = !program->death_flag;
 	pthread_mutex_unlock(&program->death_mutex);
-	return (flag);
+	return (continue_flag);
 }
+// int should_continue(t_program *program)
+// {
+// 	int result;
+
+// 	pthread_mutex_lock(&program->death_mutex);
+// 	result = !program->death_flag;
+// 	pthread_mutex_unlock(&program->death_mutex);
+
+// 	pthread_mutex_lock(&program->meals_mutex);
+// 	result = result && !program->meals_end;
+// 	pthread_mutex_unlock(&program->meals_mutex);
+
+// 	return result;
+// }
+
+
 void	philo_solo(t_program *program, t_philo *philo)
 {
 		pthread_mutex_lock(philo->left_fork);
@@ -52,11 +80,8 @@ void	*philo_routine(void *arg)
 		usleep(5);
 	while (should_continue(program))
 	{
-		pthread_mutex_lock(&philo->meal_mutex);
-		temp_meal_count = philo->meal_count;
-		pthread_mutex_unlock(&philo->meal_mutex);
-		if (program->times_to_eat != -1 && temp_meal_count >= program->times_to_eat)
-			break ;
+		if (check_meals_done(program, philo))
+			break;
 		to_eat(philo);
 		to_sleep(philo);
 		to_think(philo);

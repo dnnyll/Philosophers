@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 10:32:19 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/17 16:56:18 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/18 11:27:35 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,44 +58,68 @@ int	check_philo_death(t_philo *philo, t_program *program)
 	pthread_mutex_unlock(&philo->meal_mutex);
 	if (died)
 	{
-		// pthread_mutex_lock(&program->print_mutex);
 		temp_start_time = program->start_time;
 		print_action(philo, "died");
-		// printf("[%lld ms] Philosopher %d died\n",
-		// 	current_time - temp_start_time,
-		// 	philo->philo_id);
-		// pthread_mutex_unlock(&program->print_mutex);
 		pthread_mutex_lock(&program->death_mutex);
 		program->death_flag = 1;
 		pthread_mutex_unlock(&program->death_mutex);
 	}
 	return (died);
 }
-
 void	*monitor_routine(void *arg)
 {
 	t_program	*program;
 	int			i;
+	int			done_eating;
+	int			meals;
 
 	program = (t_program *)arg;
 	while (should_continue(program))
 	{
 		i = 0;
+		done_eating = 1;
 		while (i < program->philo_count)
 		{
-			if (program->times_to_eat != -1 && program->philos[i].meal_count >= program->times_to_eat)
-			{
-				i++;
-				continue ;
-			}
+			pthread_mutex_lock(&program->philos[i].meal_mutex);
+			meals = program->philos[i].meal_count;
+			pthread_mutex_unlock(&program->philos[i].meal_mutex);
 			if (check_philo_death(&program->philos[i], program))
 				return (NULL);
+			if (program->times_to_eat == -1 || meals < program->times_to_eat)
+				done_eating = 0;
 			i++;
 		}
+		if (done_eating)
+			return (NULL);
 		usleep(100);
 	}
 	return (NULL);
 }
+
+// void	*monitor_routine(void *arg)
+// {
+// 	t_program	*program;
+// 	int			i;
+
+// 	program = (t_program *)arg;
+// 	while (should_continue(program))
+// 	{
+// 		i = 0;
+// 		while (i < program->philo_count)
+// 		{
+// 			if (program->times_to_eat != -1 && program->philos[i].meal_count >= program->times_to_eat)
+// 			{
+// 				i++;
+// 				continue ;
+// 			}
+// 			if (check_philo_death(&program->philos[i], program))
+// 				return (NULL);
+// 			i++;
+// 		}
+// 		usleep(100);
+// 	}
+// 	return (NULL);
+// }
 
 
 

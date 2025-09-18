@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 14:13:29 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/17 11:32:22 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/18 10:54:43 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,13 @@ int	init_program(t_program *program)
 	program->death_flag = 0;
 	program->start_time = get_current_time();
 	program->threads_ready = 0;
+	program->meals_end = 0;
 	program->forks = malloc(sizeof(pthread_mutex_t) * program->philo_count);
 	if (!program->forks)
 		return (1);
 	pthread_mutex_init(&program->death_mutex, NULL);
 	pthread_mutex_init(&program->print_mutex, NULL);
+	pthread_mutex_init(&program->meals_mutex, NULL);
 	// pthread_mutex_init(&program->ready_mutex, NULL);
 	i = 0;
 	while (i < program->philo_count)

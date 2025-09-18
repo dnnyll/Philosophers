@@ -6,11 +6,13 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 16:51:08 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/17 16:55:33 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/18 10:39:11 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
+
+
 
 void take_forks(t_philo *philo)
 {

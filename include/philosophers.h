@@ -33,9 +33,11 @@ typedef struct	s_program
 	long long		start_time;
 	int				death_flag;
 	int				threads_ready;
+	int				meals_end;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	death_mutex;
 	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	meals_mutex;
 	// pthread_mutex_t	ready_mutex;
 	// pthread_mutex_t	start_mutex;
 	t_philo			*philos;
@@ -43,7 +45,6 @@ typedef struct	s_program
 
 void	philo_solo(t_program *program, t_philo *philo);
 
-void	thread_clean(t_program *program);
 void cleanup(t_program *program);
 void free_all(t_program *program);
 int check_philo_death(t_philo *philo, t_program *program);
