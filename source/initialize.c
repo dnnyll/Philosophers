@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 14:13:29 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/18 10:54:43 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/18 16:50:49 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ int	init_program(t_program *program)
 	pthread_mutex_init(&program->death_mutex, NULL);
 	pthread_mutex_init(&program->print_mutex, NULL);
 	pthread_mutex_init(&program->meals_mutex, NULL);
-	// pthread_mutex_init(&program->ready_mutex, NULL);
 	i = 0;
 	while (i < program->philo_count)
 	{
@@ -74,10 +73,7 @@ t_philo	*allocate_philos(int count)
 
 	philos = malloc(sizeof(t_philo) * count);
 	if (!philos)
-	{
-		printf("Error: memory allocation failed for philosophers\n");
 		return (NULL);
-	}
 	return (philos);
 }
 
@@ -86,30 +82,21 @@ t_philo	*init_all(t_program *program, char **argv)
 	t_philo	*philos;
 
 	if (init_input(program, argv) != 0)
-	{
-		printf("Error: invalid input.\n");
-		return NULL;
-	}
+		return (NULL);
 	if (init_program(program) != 0)
-	{
-		printf("Error: failed to initialize program.\n");
-		return NULL;
-	}
+		return (NULL);
 	philos = malloc(sizeof(t_philo) * program->philo_count);
 	if (!philos)
 	{
-		printf("Error: memory allocation failed for philosophers.\n");
 		free(program->forks);
-		return NULL;
+		return (NULL);
 	}
 	if (init_philo(philos, program) != 0)
 	{
-		printf("Error: failed to initialize philosophers.\n");
 		free(philos);
 		free(program->forks);
-		return NULL;
+		return (NULL);
 	}
 	program->philos = philos;
-	return philos;
+	return (philos);
 }
-

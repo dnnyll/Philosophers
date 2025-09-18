@@ -2,9 +2,9 @@ NAME = philosophers
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 INCLUDES = include
-SRCS =	source/initialize.c \
+SRCS =	source/cleanup.c \
+		source/initialize.c \
 		source/main.c \
-		source/memory_utils.c \
 		source/monitor.c \
 		source/parser.c \
 		source/print.c \

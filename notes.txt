@@ -154,3 +154,34 @@ This logic goes inside the eating routine, not during initialization.
 valgrind --tool=helgrind ./philosophers 5 400 200 200
 valgrind --tool=helgrind --track-lockorders=yes --history-level=full ./philosophers 5 800 200 200
 valgrind -s --leak-check=full --show-leak-kinds=all --track-fds=all ./philosophers 4 400 200 200
+
+
+t_program
+├─ forks[N]           -> N pthread_mutex_t (shared)
+├─ philos[N]          -> N t_philo
+│   ├─ left_fork      -> points to forks[i]
+│   ├─ right_fork     -> points to forks[(i+1)%N]
+│   ├─ meal_mutex     -> protects meal_count & meal_last
+│   └─ thread         -> philosopher thread
+├─ print_mutex        -> protects printing
+├─ death_mutex        -> protects death_flag
+├─ meals_mutex        -> protects global meal count
+
+
+Philosophers (philo array):
+
+philo[0]:
+    left_fork  -> &forks[0]
+    right_fork -> &forks[1]
+
+philo[1]:
+    left_fork  -> &forks[1]
+    right_fork -> &forks[2]
+
+philo[2]:
+    left_fork  -> &forks[2]
+    right_fork -> &forks[3]
+
+philo[3]:
+    left_fork  -> &forks[3]
+    right_fork -> &forks[0]  (wrap-around)

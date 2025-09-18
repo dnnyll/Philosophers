@@ -6,23 +6,19 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/16 16:51:08 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/18 10:39:11 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:02:16 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-
-
-void take_forks(t_philo *philo)
+void	grab_forks(t_philo *philo)
 {
 	if (philo->philo_id % 2 == 0)
 	{
 		pthread_mutex_lock(philo->right_fork);
-		// left_fork = 1;
 		print_action(philo, "has taken a fork");
 		pthread_mutex_lock(philo->left_fork);
-		// right fork = 1
 		print_action(philo, "has taken a fork");
 	}
 	else
@@ -42,27 +38,24 @@ void	release_forks(t_philo *philo)
 
 void	to_think(t_philo *philo)
 {
-	t_program *program;
-	
+	t_program	*program;
+
 	program = philo->program;
 	pthread_mutex_lock(&program->print_mutex);
-	// pthread_mutex_lock(&program->death_mutex);
-	if (should_continue(program))
+	if (check_death_flag(program))
 		printf("%lld Philosopher %d is thinking\n",
 			get_current_time() - program->start_time,
 			philo->philo_id);
-	// pthread_mutex_unlock(&program->death_mutex);
 	pthread_mutex_unlock(&program->print_mutex);
 	sleep_monitor(5, program);
 }
 
 void	to_eat(t_philo	*philo)
 {
-	t_program *program;
+	t_program	*program;
 
 	program = philo->program;
-	take_forks(philo);
-
+	grab_forks(philo);
 	pthread_mutex_lock(&philo->meal_mutex);
 	philo->meal_last = get_current_time();
 	philo->meal_count++;
@@ -74,13 +67,9 @@ void	to_eat(t_philo	*philo)
 
 void	to_sleep(t_philo *philo)
 {
-	t_program *program;
+	t_program	*program;
 
 	program = philo->program;
-	// pthread_mutex_lock(&program->death_mutex);
-	// if (!should_continue(program))
-	// 	return ;
-	// pthread_mutex_unlock(&program->death_mutex);
 	print_action(philo, "is sleeping");
 	sleep_monitor(program->time_to_sleep, program);
 }
