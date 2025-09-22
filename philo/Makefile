@@ -2,17 +2,17 @@ NAME = philosophers
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 INCLUDES = include
-SRCS =	source/cleanup.c \
-		source/initialize.c \
-		source/main.c \
-		source/monitor.c \
-		source/parser.c \
-		source/print.c \
-		source/routine_actions.c \
-		source/routine.c \
-		source/threads.c \
-		source/time.c \
-		source/utils.c
+SRCS =	srcs/cleanup.c \
+		srcs/initialize.c \
+		srcs/main.c \
+		srcs/monitor.c \
+		srcs/parser.c \
+		srcs/print.c \
+		srcs/routine_actions.c \
+		srcs/routine.c \
+		srcs/threads.c \
+		srcs/time.c \
+		srcs/utils.c
 
 OBJS = $(SRCS:.c=.o)
 %.o: %.c

@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 16:04:41 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/18 17:01:19 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/22 11:15:57 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ typedef struct s_program
 
 //	cleanup.c
 void		cleanup(t_program *program);
-
 int			check_death_flag(t_program *program);
 
 //	initialize.c

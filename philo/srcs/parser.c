@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 12:13:00 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/18 16:59:00 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/22 10:47:36 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	verify_input_args(char **argv)
 			return (printf("Invalid feasting time\n"), 1);
 		if (i == 4 && value <= 0)
 			return (printf("Invalid resting time\n"), 1);
-		if (i == 5 && value < 0)
+		if (i == 5 && value <= 0)
 			return (printf("Invalid number of meals\n"), 1);
 		i++;
 	}
