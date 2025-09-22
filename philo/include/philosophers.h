@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 16:04:41 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/22 11:15:57 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/22 11:32:27 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ typedef struct s_program
 
 //	cleanup.c
 void		cleanup(t_program *program);
-int			check_death_flag(t_program *program);
 
 //	initialize.c
 int			init_input(t_program *program, char **argv);
@@ -71,16 +70,19 @@ void		*monitor_routine(void *arg);
 //	parser.c
 int			verify_input_args(char **input);
 
-//	routine.c
+//	print.c
 void		print_action(t_philo *philo, const char *action);
-void		grab_forks(t_philo *philo);
-void		release_forks(t_philo *philo);
+
+//	routine.c
+int			check_death_flag(t_program *program);
+void		*philo_routine(void *arg);
 
 //routine_actions.c
+void		grab_forks(t_philo *philo);
+void		release_forks(t_philo *philo);
 void		to_think(t_philo *philo);
 void		to_eat(t_philo *philo);
 void		to_sleep(t_philo *philo);
-void		*philo_routine(void *arg);
 
 //	threads.c
 int			thread_create(t_program *program, t_philo *philo);
@@ -97,22 +99,3 @@ int			is_valid_digit(char *arg);
 int			ft_atoi(const char *str);
 
 #endif
-/*
-┌───────────┬───────────────┬─────────────────────────────────┐
-│ Color     │ ANSI Code      │ Meaning / Use                  │
-├───────────┼───────────────┼─────────────────────────────────┤
-│ WHITE     │ \033[0;37m    │ Normal text / philosophers full │
-│ RED       │ \033[0;31m    │ Dead / error                    │
-│ GREEN     │ \033[0;32m    │ Thinking / ok                   │
-│ YELLOW    │ \033[0;33m    │ Fork taken / warning            │
-│ BLUE      │ \033[0;34m    │ Sleeping / info                 │
-│ MAGENTA   │ \033[0;35m    │ Eating / active                 │
-├───────────┴───────────────┴─────────────────────────────────┤
-│ How it works:                                               │
-│ 1. \033[ starts the escape sequence                         │
-│ 2. 0 = normal, 1 = bold/bright, etc.                        │
-│ 3. 30-37 = foreground colors (black-white)                  │
-│ 4. m ends the code and applies it                           │
-│ 5. Reset color with \033[0m after printing                  │
-└─────────────────────────────────────────────────────────────┘
-*/

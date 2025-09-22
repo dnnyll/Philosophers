@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 12:12:56 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/22 10:34:40 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/22 11:39:14 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,22 +51,3 @@ int	main(int argc, char **argv)
 	cleanup(&program);
 	return (0);
 }
-
-// static int	init_start(t_program *program, t_philo *philo)
-// {
-// 	int	i;
-
-// 	pthread_mutex_lock(&philo->meal_mutex);
-// 	program->start_time = get_current_time();
-// 	pthread_mutex_unlock(&philo->meal_mutex);
-// 	i = 0;
-// 	while (i < program->philo_count)
-// 	{
-// 		pthread_mutex_lock(&program->philos[i].meal_mutex);
-// 		program->philos[i].meal_last = program->start_time;
-// 		program->philos[i].meal_count = 0;
-// 		pthread_mutex_unlock(&program->philos[i].meal_mutex);
-// 		i++;
-// 	}
-// 	return (0);
-// }
