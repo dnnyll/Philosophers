@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 10:32:19 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/22 09:17:33 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/22 10:27:32 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ pthread_t	start_monitor(t_program *program)
 static int	check_philo_death(t_philo *philo, t_program *program)
 {
 	long long	current_time;
-	// long long	temp_start_time;
 	int			died;
 
 	pthread_mutex_lock(&philo->meal_mutex);
@@ -54,7 +53,6 @@ static int	check_philo_death(t_philo *philo, t_program *program)
 	pthread_mutex_unlock(&philo->meal_mutex);
 	if (died)
 	{
-		// temp_start_time = program->start_time;
 		print_action(philo, "died");
 		pthread_mutex_lock(&program->death_mutex);
 		program->death_flag = 1;
@@ -63,11 +61,11 @@ static int	check_philo_death(t_philo *philo, t_program *program)
 	return (died);
 }
 
-static int check_all_philos(t_program *program)
+static int	check_all_philos(t_program *program)
 {
-	int i;
-	int done_eating;
-	int meals;
+	int	i;
+	int	done_eating;
+	int	meals;
 
 	i = 0;
 	done_eating = 1;
@@ -85,7 +83,7 @@ static int check_all_philos(t_program *program)
 	return (done_eating);
 }
 
-void *monitor_routine(void *arg)
+void	*monitor_routine(void *arg)
 {
 	t_program	*program;
 	int			done_eating;
