@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 14:13:29 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/18 16:50:49 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/22 09:25:20 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ int	init_input(t_program *program, char **argv)
 		program->times_to_eat = -1;
 	return (0);
 }
-
+//	assignment of values for left and right forks from allocated mutex array
+//	% number of philosophers allows last philo right fork to be 1st philo left fork
 int	init_philo(t_philo *philo, t_program *program)
 {
 	int	i;
@@ -43,7 +44,7 @@ int	init_philo(t_philo *philo, t_program *program)
 	}
 	return (0);
 }
-
+//	allocation of an array of mutex based on the number of threads/philosophers
 int	init_program(t_program *program)
 {
 	int	i;

@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 10:32:19 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/18 16:57:13 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/22 09:17:33 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ pthread_t	start_monitor(t_program *program)
 static int	check_philo_death(t_philo *philo, t_program *program)
 {
 	long long	current_time;
-	long long	temp_start_time;
+	// long long	temp_start_time;
 	int			died;
 
 	pthread_mutex_lock(&philo->meal_mutex);
@@ -54,7 +54,7 @@ static int	check_philo_death(t_philo *philo, t_program *program)
 	pthread_mutex_unlock(&philo->meal_mutex);
 	if (died)
 	{
-		temp_start_time = program->start_time;
+		// temp_start_time = program->start_time;
 		print_action(philo, "died");
 		pthread_mutex_lock(&program->death_mutex);
 		program->death_flag = 1;
@@ -63,32 +63,70 @@ static int	check_philo_death(t_philo *philo, t_program *program)
 	return (died);
 }
 
-void	*monitor_routine(void *arg)
+static int check_all_philos(t_program *program)
+{
+	int i;
+	int done_eating;
+	int meals;
+
+	i = 0;
+	done_eating = 1;
+	while (i < program->philo_count)
+	{
+		pthread_mutex_lock(&program->philos[i].meal_mutex);
+		meals = program->philos[i].meal_count;
+		pthread_mutex_unlock(&program->philos[i].meal_mutex);
+		if (check_philo_death(&program->philos[i], program))
+			return (-1);
+		if (program->times_to_eat == -1 || meals < program->times_to_eat)
+			done_eating = 0;
+		i++;
+	}
+	return (done_eating);
+}
+
+void *monitor_routine(void *arg)
 {
 	t_program	*program;
-	int			i;
 	int			done_eating;
-	int			meals;
 
 	program = (t_program *)arg;
 	while (check_death_flag(program))
 	{
-		i = 0;
-		done_eating = 1;
-		while (i < program->philo_count)
-		{
-			pthread_mutex_lock(&program->philos[i].meal_mutex);
-			meals = program->philos[i].meal_count;
-			pthread_mutex_unlock(&program->philos[i].meal_mutex);
-			if (check_philo_death(&program->philos[i], program))
-				return (NULL);
-			if (program->times_to_eat == -1 || meals < program->times_to_eat)
-				done_eating = 0;
-			i++;
-		}
-		if (done_eating)
+		done_eating = check_all_philos(program);
+		if (done_eating == -1 || done_eating == 1)
 			return (NULL);
 		usleep(100);
 	}
 	return (NULL);
 }
+
+// void	*monitor_routine(void *arg)
+// {
+// 	t_program	*program;
+// 	int			i;
+// 	int			done_eating;
+// 	int			meals;
+
+// 	program = (t_program *)arg;
+// 	while (check_death_flag(program))
+// 	{
+// 		i = 0;
+// 		done_eating = 1;
+// 		while (i < program->philo_count)
+// 		{
+// 			pthread_mutex_lock(&program->philos[i].meal_mutex);
+// 			meals = program->philos[i].meal_count;
+// 			pthread_mutex_unlock(&program->philos[i].meal_mutex);
+// 			if (check_philo_death(&program->philos[i], program))
+// 				return (NULL);
+// 			if (program->times_to_eat == -1 || meals < program->times_to_eat)
+// 				done_eating = 0;
+// 			i++;
+// 		}
+// 		if (done_eating)
+// 			return (NULL);
+// 		usleep(100);
+// 	}
+// 	return (NULL);
+// }
