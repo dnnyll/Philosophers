@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/06 10:32:19 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/22 10:27:32 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/22 11:48:05 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,6 @@ void	sleep_monitor(long long duration, t_program *program)
 		usleep(100);
 		current = get_current_time();
 	}
-}
-
-pthread_t	start_monitor(t_program *program)
-{
-	pthread_t	monitor_thread;
-
-	if (pthread_create(&monitor_thread, NULL, monitor_routine, program) != 0)
-		printf("Error: failed to create monitor thread.\n");
-	return (monitor_thread);
 }
 
 static int	check_philo_death(t_philo *philo, t_program *program)
@@ -98,33 +89,3 @@ void	*monitor_routine(void *arg)
 	}
 	return (NULL);
 }
-
-// void	*monitor_routine(void *arg)
-// {
-// 	t_program	*program;
-// 	int			i;
-// 	int			done_eating;
-// 	int			meals;
-
-// 	program = (t_program *)arg;
-// 	while (check_death_flag(program))
-// 	{
-// 		i = 0;
-// 		done_eating = 1;
-// 		while (i < program->philo_count)
-// 		{
-// 			pthread_mutex_lock(&program->philos[i].meal_mutex);
-// 			meals = program->philos[i].meal_count;
-// 			pthread_mutex_unlock(&program->philos[i].meal_mutex);
-// 			if (check_philo_death(&program->philos[i], program))
-// 				return (NULL);
-// 			if (program->times_to_eat == -1 || meals < program->times_to_eat)
-// 				done_eating = 0;
-// 			i++;
-// 		}
-// 		if (done_eating)
-// 			return (NULL);
-// 		usleep(100);
-// 	}
-// 	return (NULL);
-// }

@@ -6,7 +6,7 @@
 /*   By: daniefe2 <daniefe2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 16:04:41 by daniefe2          #+#    #+#             */
-/*   Updated: 2025/09/22 11:32:27 by daniefe2         ###   ########.fr       */
+/*   Updated: 2025/09/22 11:48:11 by daniefe2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ int			init_program(t_program *program);
 t_philo		*init_all(t_program *program, char **argv);
 
 //	monitor.c
-pthread_t	start_monitor(t_program *program);
 void		sleep_monitor(long long duration, t_program *program);
 void		*monitor_routine(void *arg);
 
